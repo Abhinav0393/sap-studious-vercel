@@ -1,0 +1,142 @@
+/* =========================================================
+   SAP STUDIOS — SHARED DESIGN TOKENS
+   One source of truth for color, type, and base layout rules.
+   Link this on every page, BEFORE any page-specific <style>:
+   <link rel="stylesheet" href="shared/tokens.css">
+   ========================================================= */
+
+/* FONTS: not imported here on purpose. An @import inside CSS makes the browser download this file first and only
+   then discover the fonts (slow, render-blocking). Each page loads them with <link> tags in its <head> instead:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&family=Montserrat:wght@400;500;600;700&display=swap">
+   (Home also needs Livvic:wght@700 if it uses --font-brand.) */
+
+:root{
+  /* ---- Color tokens ---- */
+  --color-bg-light: #fbfbf9;
+  --color-bg-dark:  #070706;
+  --color-ink-light:#111111;
+  --color-ink-dark: #ffffff;
+  --color-muted:    rgba(128,128,128,0.6);
+  --color-muted-text:#5f5f5a;              /* small muted text on light backgrounds (>= 4.5:1 contrast) */
+  --text-body:#3a3a38;                     /* body paragraphs at ~15–17px on light backgrounds */
+  --color-placeholder:#e4e4e2;             /* neutral grey shown while an image loads */
+  --color-line:rgba(17,17,17,.14);         /* 1px rules on light backgrounds */
+  --color-chip:#ededeb;                    /* light-grey buttons inside the project popup */
+
+  /* ---- Typography tokens — three official brand fonts, each with a defined job ----
+     --font-sans    (Montserrat)     : body text, nav links, buttons, captions — the UI workhorse
+     --font-display (League Spartan) : big headlines, page titles, project names — bold and confident
+     --font-brand   (Livvic Bold)    : the SAP STUDIOS wordmark/logo specifically, nowhere else */
+  --font-sans:    'Montserrat', Arial, sans-serif;
+  --font-display: 'League Spartan', Arial, sans-serif;
+  --font-brand:   'Livvic', Arial, sans-serif;
+  --nav-font-size: clamp(15px, 1.45vw, 22px);
+  --nav-letter-spacing: 0.45px;
+  --nav-letter-spacing-active: 1px;
+
+  /* ---- Spacing tokens ---- */
+  --header-padding: 28px 38px;
+  --header-padding-mobile: 20px;
+  --page-gutter:clamp(20px,3.5vw,48px);    /* inner pages: header, slider text, grid and footer share this edge */
+  --header-h:calc(28px + clamp(126px, 10.5vw, 205px) * 507 / 1248 + 28px);  /* inner pages: matches Home header */
+  --grid-gap:clamp(8px,.8vw,12px);
+
+  /* ---- Motion tokens ---- */
+  --transition-theme: background-color .7s ease, color .7s ease;
+  --transition-nav: transform .8s cubic-bezier(.22,.8,.2,1),
+                     letter-spacing .8s cubic-bezier(.22,.8,.2,1),
+                     opacity .65s ease, color .7s ease;
+  --ease-out:cubic-bezier(.22,.8,.2,1);
+  --dur-fast:.3s;
+  --dur-mid:.5s;
+  --dur-slow:.8s;
+}
+
+/* ---- Base reset (shared by every page) ---- */
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
+
+body{
+  background: var(--color-bg-light);
+  color: var(--color-ink-light);
+  font-family: var(--font-sans);
+  overflow-x:hidden;
+  position:relative;
+  transition: var(--transition-theme);
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+body.dark{
+  background: var(--color-bg-dark);
+  color: var(--color-ink-dark);
+}
+
+/* Inner pages (Architecture, Interiors, ...) scroll normally: <body class="page">.
+   Safe-area padding is removed here because the fixed top bar and the footer handle the notch themselves. */
+body.page{
+  overflow:visible; height:auto; min-height:100%;
+  padding-top:0; padding-bottom:0;
+}
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/* ---- Shared header bar (logo + contact button) ----
+   Markup for this is injected by shared/nav.js — these rules
+   style whatever nav.js inserts into #site-header. */
+header.site-header{
+  position:relative; z-index:4;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding: var(--header-padding);
+  color:inherit;
+}
+.brand{
+  display:block;
+  width:clamp(126px,10.5vw,205px);
+  height:auto;
+  color:inherit; text-decoration:none;
+  line-height:0;
+  font-family: var(--font-brand);
+  font-weight:700;
+}
+.brand-image{
+  display:block; width:100%; height:auto;
+  object-fit:contain; transform-origin:top left;
+  filter:brightness(0) contrast(1.7);
+}
+body.dark .brand-image{ filter:invert(1) brightness(1.18) contrast(1.12); }
+
+@media (max-width:700px){
+  :root{ --header-h:calc(20px + 108px * 507 / 1248 + 20px); }
+  header.site-header{ padding: var(--header-padding-mobile); }
+  .brand{ width:108px; }
+}
+
+/* ---- Headline defaults — any h1/h2 on any page automatically gets the display font ---- */
+h1,h2{
+  font-family: var(--font-display);
+  font-weight:600;
+  margin:0;
+}
+
+/* Body copy at body size: one colour, weight 400, no opacity tint */
+.plan .prose p,
+.founder__bio,
+.svc__line,
+.popup__desc,
+.popup__desc--full p,
+.contact-subtitle{
+  color:var(--text-body);
+  font-weight:400;
+  opacity:1;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    transition-duration:.01ms !important;
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    scroll-behavior:auto !important;
+  }
+}

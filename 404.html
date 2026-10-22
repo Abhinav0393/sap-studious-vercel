@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="/">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>404 — Page Not Found | SAP Studios, Hyderabad</title>
+<meta name="description" content="The page you requested could not be found. Return to SAP Studios architecture and interior design portfolio.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#070706">
+
+<!-- Icons -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap">
+
+<!-- Chrome & Shared Styles -->
+<link rel="stylesheet" href="/shared/tokens.css">
+<link rel="stylesheet" href="/shared/components.css?v=20261017c">
+
+<style>
+  .error-main {
+    padding-top: calc(var(--header-h, 76px) + env(safe-area-inset-top, 0px));
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg-light, #fbfbf9);
+    color: var(--color-ink-light, #111);
+  }
+  .error-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px var(--page-gutter, clamp(20px, 3.5vw, 48px)) 80px;
+    width: 100%;
+  }
+  .sheet-tag-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sheet-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #111;
+    flex: none;
+  }
+  .lbl {
+    font: 600 11px/1.5 var(--font-sans, 'Montserrat', Arial, sans-serif);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #5f5f5a;
+  }
+  .sheet-tag-badge {
+    border: 1px solid rgba(17, 17, 17, 0.3);
+    padding: 6px 10px;
+    color: #111;
+    font: 600 11px/1.5 var(--font-sans, 'Montserrat', Arial, sans-serif);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .hl {
+    height: 1px;
+    background-color: rgba(17, 17, 17, 0.14);
+    border: 0;
+    margin: 0;
+    flex: 1;
+  }
+  .error-code {
+    font: 600 clamp(64px, 10vw, 120px)/1 var(--font-display, 'League Spartan', Arial, sans-serif);
+    color: #111;
+    margin: 40px 0 16px;
+    letter-spacing: -2px;
+  }
+  .error-title {
+    font: 600 clamp(24px, 3.5vw, 36px)/1.2 var(--font-display, 'League Spartan', Arial, sans-serif);
+    color: #111;
+    margin: 0 0 16px;
+  }
+  .error-desc {
+    font: 400 16px/1.6 var(--font-sans, 'Montserrat', Arial, sans-serif);
+    color: #5f5f5a;
+    margin: 0 0 36px;
+    max-width: 520px;
+  }
+  .error-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    height: 48px;
+    padding: 0 24px;
+    background-color: #111;
+    color: #fff;
+    border: 1px solid #111;
+    font: 600 11px var(--font-sans, 'Montserrat', Arial, sans-serif);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  .error-home-btn:hover {
+    background-color: #333;
+  }
+</style>
+
+<!-- Scripts -->
+<script src="/shared/nav.js?v=20261017" defer></script>
+</head>
+<body class="page" data-nav="inner" data-page="404">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<main id="main" class="error-main">
+  <div class="error-container">
+    <div class="sheet-tag-row">
+      <span class="sheet-dot" aria-hidden="true"></span>
+      <span class="lbl">+0.000</span>
+      <hr class="hl" aria-hidden="true">
+      <span class="sheet-tag-badge">404 / Error</span>
+    </div>
+
+    <div class="error-code">404</div>
+    <h1 class="error-title">Page not found.</h1>
+    <p class="error-desc">The drawing, page or link you are looking for has been moved, renamed, or does not exist.</p>
+    <a class="error-home-btn" href="/index.html">RETURN HOME &rarr;</a>
+  </div>
+</main>
+
+<footer data-sap-footer></footer>
+</body>
+</html>

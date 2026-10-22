@@ -1,0 +1,13 @@
+/* shared/noscript.css — loaded only when JavaScript is switched off or blocked (see <noscript> in each page's <head>).
+   The slider, grid and popup are built by JavaScript, so without it the page shows a plain, readable project list. */
+.slider{display:none}
+.work{min-height:0;padding-top:calc(var(--page-gutter) * 1.5)}
+.ns-nav{display:flex;flex-wrap:wrap;gap:4px 28px;padding:18px var(--page-gutter);border-bottom:1px solid var(--color-line)}
+.ns-nav a{font:500 11px/1 var(--font-sans);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;padding:12px 0}
+.ns-nav a:hover{text-decoration:underline}
+.ns-list{list-style:none;display:grid;gap:56px var(--grid-gap);grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.ns-item img{display:block;width:100%;height:auto;background:var(--color-placeholder)}
+.ns-item h2{font:600 clamp(24px,2.4vw,32px)/1.1 var(--font-display);margin:16px 0 8px}
+.ns-meta{font:500 11px/1.6 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--color-muted-text);margin-bottom:12px}
+.ns-item p{font:400 14px/1.7 var(--font-sans);max-width:62ch;margin-bottom:1em}
+.ns-item a{color:inherit}

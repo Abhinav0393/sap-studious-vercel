@@ -1,0 +1,407 @@
+/* =========================================================
+   SAP STUDIOS: HOME (css/home.css)
+   Moved verbatim from the approved single-file Home page. Nothing visual was changed.
+   The three embedded images (idle drawing sheet and grain texture) are now files under
+   assets/images/. Plain CSS, no build step.
+   ========================================================= */
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    min-height:100vh;
+    min-height:100svh;
+    min-height:100dvh;
+    background:#fff;color:#111;
+    font-family:'Montserrat',Arial,sans-serif;
+    overflow:hidden;position:relative;
+    transition:background-color .7s ease,color .7s ease;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  body.dark{background:#050505;color:#fff;}
+  canvas#bg3d{
+    position:fixed;inset:0;z-index:0;width:100%;height:100%;
+    display:block;touch-action:pan-y;
+    filter:saturate(.82) contrast(1.02);
+  }
+  .placeholder{
+    position:fixed;inset:0;z-index:1;opacity:0;visibility:hidden;
+    overflow:hidden;pointer-events:none;background:#080808;
+    transition:opacity 1.05s cubic-bezier(.22,.8,.2,1),visibility 0s linear 1.05s;
+  }
+  .placeholder.active{opacity:1;visibility:visible;transition:opacity 1.05s cubic-bezier(.22,.8,.2,1),visibility 0s;}
+  .placeholder::before{
+    content:'';position:absolute;inset:-3%;background:inherit;
+    transform:scale(1.04);transition:transform 1.4s cubic-bezier(.22,.8,.2,1);
+  }
+  .placeholder.active::before{transform:scale(1);}
+  .placeholder::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,.14),rgba(0,0,0,.28));
+    mix-blend-mode:multiply;pointer-events:none;
+  }
+  .placeholder .photo{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 50%;
+    filter:grayscale(1) contrast(1.04);
+    transform:scale(1.035);opacity:0;
+    transition:transform 1.25s cubic-bezier(.22,.8,.2,1),opacity .85s ease;
+    will-change:transform,opacity;
+  }
+  /* Image focal points are tuned for portrait phones, tablets and short landscape screens. */
+  #ph-team .photo{object-position:50% 48%}
+  #ph-about .photo{object-position:50% 50%}
+  @media (max-aspect-ratio: 4/5){
+    .placeholder .photo{object-position:center center;transform:scale(1.015)}
+    .placeholder.active .photo{transform:scale(1)}
+    #ph-team .photo{object-position:52% 45%}
+    #ph-about .photo{object-position:50% 48%}
+    .placeholder .photo-label{left:22px;right:22px;bottom:max(26px,env(safe-area-inset-bottom));font-size:10px;letter-spacing:2.5px;line-height:1.6}
+  }
+  @media (max-height:500px) and (orientation:landscape){
+    .placeholder .photo{object-position:center 44%;transform:scale(1.015)}
+    .placeholder.active .photo{transform:scale(1)}
+    .placeholder .photo-label{bottom:max(18px,env(safe-area-inset-bottom));left:24px;font-size:9px;letter-spacing:2px}
+  }
+  .placeholder.active .photo{transform:scale(1);opacity:1;}
+  .placeholder .photo-vignette{
+    position:absolute;inset:0;z-index:2;
+    background:radial-gradient(circle at center,transparent 38%,rgba(0,0,0,.24) 100%);
+    opacity:.65;pointer-events:none;
+  }
+  .placeholder .photo-label{
+    position:absolute;left:clamp(22px,6vw,90px);bottom:clamp(28px,7vh,72px);
+    z-index:3;color:#fff;font-size:clamp(10px,1vw,13px);
+    letter-spacing:4px;font-weight:400;opacity:0;
+    transform:translateY(12px);
+    transition:opacity .7s ease .35s,transform .9s cubic-bezier(.22,.8,.2,1) .35s;
+  }
+  .placeholder.active .photo-label{opacity:.82;transform:translateY(0);}
+  .center-dot{display:none;}
+  header{
+    position:relative;z-index:4;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 38px;
+    color:inherit;
+  }
+  .brand{
+    display:block;
+    width:clamp(126px,10.5vw,205px);
+    height:auto;
+    color:inherit;text-decoration:none;
+    line-height:0;
+    font-family:'Livvic',Arial,sans-serif;
+    font-weight:700;
+  }
+  .brand-image{
+    display:block;
+    width:100%;
+    height:auto;
+    object-fit:contain;
+    transform-origin:top left;
+  }
+  .brand-image{filter:brightness(0) contrast(1.7);}
+  body.dark .brand-image{filter:brightness(0) invert(1);}
+
+  .contact-box{
+    min-width:140px;height:38px;
+    padding:0 18px;
+    display:flex;align-items:center;justify-content:center;
+    border:1.5px solid #111;
+    color:#111;text-decoration:none;
+    font-family:'Montserrat',Arial,sans-serif;
+    font-size:10px;font-weight:500;letter-spacing:2.2px;
+    transition:color .7s ease,border-color .7s ease,background-color .7s ease;
+  }
+  body.dark .contact-box{
+    color:#fff;border-color:#fff;
+    border-width:1.5px;
+  }
+  .center-dot{display:none!important;}
+  main{position:absolute;inset:0;width:100%;height:100%;z-index:2;}
+  /* Invisible interaction boundary: matches the red reference rectangle exactly.
+     The red outline itself is never rendered. The four zones fill this boundary. */
+  .zones-grid{
+    position:absolute;
+    top:14%; left:12.1%; right:10.3%; bottom:8%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+    z-index:1;
+    cursor:default;
+  }
+  .zone{cursor:pointer;min-width:0;min-height:0;}
+  .label-box{
+    position:absolute;top:25.6%;left:22.6%;right:25%;bottom:24.5%;
+    z-index:2;pointer-events:none;border:none;background:transparent;
+    transition:transform .8s cubic-bezier(.2,.8,.2,1);
+  }
+  .nav-link{
+    position:absolute;font-family:'League Spartan',Arial,sans-serif;font-size:clamp(15px,1.45vw,22px);
+    letter-spacing:.45px;font-weight:600;color:inherit;opacity:.62;
+    text-decoration:none;display:inline-block;white-space:nowrap;
+    transition:transform .8s cubic-bezier(.22,.8,.2,1),
+               letter-spacing .8s cubic-bezier(.22,.8,.2,1),opacity .65s ease,color .7s ease;
+    pointer-events:auto;
+  }
+  .nav-link::after{display:none;}
+  .nav-link.tl{top:0;left:0;}
+  .nav-link.tr{top:0;right:0;}
+  .nav-link.bl{bottom:0;left:0;}
+  .nav-link.br{bottom:0;right:0;}
+  .nav-link.active{transform:scale(1.012);letter-spacing:1px;opacity:.9;}
+  .nav-link.active::after{width:0;}
+  @media (min-width:1101px){
+    .label-box{top:25.6%;left:22.6%;right:25%;bottom:24.5%;}
+    .nav-link{font-size:34px;letter-spacing:.15px;}
+  }
+  main.hovering .nav-link:not(.active){opacity:0;transform:translateY(5px);pointer-events:none;}
+  #caption{display:none;}
+  @media (max-width:701px){
+    header{padding:20px 20px 0 20px;}
+    .brand{width:108px;}
+    .contact-box{width:124px;min-width:124px;height:34px;padding:0 12px;font-size:9px;letter-spacing:2px;border-width:1.5px;}
+    .label-box{top:19%;left:7%;right:7%;bottom:19%;}
+    .nav-link{font-size:clamp(19px,6.5vw,31px);letter-spacing:0;}
+    .nav-link.active{letter-spacing:.5px;}
+    #caption{bottom:16px;font-size:8px;letter-spacing:2px;}
+  }
+
+  .zone,.nav-link{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+  @media (hover:none),(pointer:coarse){
+    .zones-grid{cursor:pointer}
+    .nav-link{opacity:.78}
+    .nav-link.active{opacity:1}
+  }
+  @media (max-width:1100px){
+    .label-box{top:24%;left:14%;right:18%;bottom:23%;}
+    .nav-link{font-size:clamp(16px,2.5vw,28px);}
+  }
+  @media (max-width:700px){
+    .label-box{top:23%;left:9%;right:11%;bottom:23%;border:none;}
+    .nav-link{font-size:clamp(13px,4.3vw,21px);letter-spacing:0;}
+    .nav-link.active{letter-spacing:.5px;}
+  }
+  @media (hover:none),(pointer:coarse){.zone{cursor:pointer;}}
+
+  /* EXACT REFERENCE NAVIGATION ALIGNMENT — desktop composition */
+  /* Exact four-word reference positioning — measured against the supplied 1870×841 reference.
+     Target text bounds: Architecture ≈ (366,216), Interiors ≈ (1337,216),
+     Team ≈ (396,662), About Us ≈ (1325,662). */
+  @media (min-width:1101px){
+    /* Keep the live interactive labels aligned with the approved background artwork. */
+    .zones-grid{
+      top:14%;
+      left:12.1%;
+      right:10.3%;
+      bottom:8%;
+    }
+    .label-box{
+      top:23.5%;
+      left:21.9%;
+      right:22.2%;
+      bottom:30%;
+    }
+    .nav-link{
+      font-size:27px;
+      line-height:1.15;
+      letter-spacing:.05px;
+    }
+  }
+
+  /* Preserve the same 2×2 relationship responsively */
+  @media (min-width:701px) and (max-width:1100px){
+    .label-box{
+      top:23.5%;
+      left:21.9%;
+      right:22.2%;
+      bottom:30%;
+    }
+    .nav-link{
+      font-size:clamp(18px,2.2vw,25px);
+      line-height:1.15;
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important;animation-iteration-count:1 !important;scroll-behavior:auto !important;}
+  }
+
+  /* =========================================================
+     CINEMATIC SAP STUDIOS OPENING REVEAL
+     The reveal uses the supplied SAP Studios logo geometry,
+     separated into its original arcs and wordmark letterforms.
+     ========================================================= */
+  .intro-overlay{
+    position:fixed;inset:0;z-index:9999;
+    display:grid;place-items:center;
+    background:#050505;
+    color:#fff;
+    overflow:hidden;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+  body.intro-active > header,
+  body.intro-active > main,
+  body.intro-active > .placeholder,
+  body.intro-active > .idle-architecture,
+  body.intro-active > #caption{
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+  .reveal-lockup{
+    position:fixed;
+    left:50%;top:50%;
+    width:min(304px,28.8vw);
+    aspect-ratio:1265 / 535;
+    transform:translate(-50%,-50%) scale(1);
+    transform-origin:center center;
+    will-change:transform,left,top;
+    transition:left 1.25s cubic-bezier(.22,.78,.18,1),
+               top 1.25s cubic-bezier(.22,.78,.18,1),
+               transform 1.25s cubic-bezier(.22,.78,.18,1);
+  }
+  .reveal-part{
+    position:absolute;
+    display:block;
+    opacity:0;
+    filter:invert(1) brightness(1.12) contrast(1.18);
+    user-select:none;
+    pointer-events:none;
+  }
+  .arc{
+    object-fit:fill;
+    transform-origin:center bottom;
+    clip-path:inset(100% 0 0 0);
+  }
+  .arc-left{left:0%;top:.93%;width:26.087%;height:97.196%;}
+  .arc-right{left:24.901%;top:14.953%;width:26.087%;height:83.178%;}
+  .reveal-lockup.arcs-1 .arc-left{
+    opacity:1;
+    animation:arcDraw .9s cubic-bezier(.22,.8,.2,1) forwards;
+  }
+  .reveal-lockup.arcs-2 .arc-right{
+    opacity:1;
+    animation:arcDraw .9s cubic-bezier(.22,.8,.2,1) forwards;
+  }
+  @keyframes arcDraw{from{clip-path:inset(100% 0 0 0);}to{clip-path:inset(0 0 0 0);}}
+  .letter{
+    transform:translateY(10px);
+    opacity:0;
+    transition:opacity .42s ease,transform .7s cubic-bezier(.22,.8,.2,1),filter .7s ease;
+    filter:invert(1) brightness(1.12) contrast(1.18) blur(1.2px);
+  }
+  .letter.visible{opacity:1;transform:translateY(0);filter:invert(1) brightness(1.12) contrast(1.18) blur(0);}
+  .lt-s1{left:54.15%;top:18.692%;width:9.091%;height:31.776%;}
+  .lt-a{left:62.846%;top:18.692%;width:13.043%;height:31.776%;}
+  .lt-p{left:75.494%;top:18.692%;width:9.881%;height:31.776%;}
+  .lt-s2{left:53.36%;top:67.29%;width:7.51%;height:18.692%;}
+  .lt-t{left:60.87%;top:67.29%;width:5.534%;height:18.692%;}
+  .lt-u{left:66.403%;top:67.29%;width:7.115%;height:18.692%;}
+  .lt-d{left:73.123%;top:67.29%;width:7.51%;height:18.692%;}
+  .lt-i{left:80.237%;top:67.29%;width:5.534%;height:18.692%;}
+  .lt-o{left:85.375%;top:67.29%;width:7.51%;height:18.692%;}
+  .lt-s3{left:92.49%;top:67.29%;width:7.51%;height:18.692%;}
+  .intro-skip{display:none;}
+  body.intro-complete .intro-overlay{
+    opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s ease .05s,visibility 0s linear .5s;
+  }
+  @media (max-width:700px){
+    .reveal-lockup{width:min(216px,36.8vw);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .intro-overlay{display:none!important;}
+    body.intro-active > header,
+    body.intro-active > main,
+    body.intro-active > .placeholder,
+    body.intro-active > .idle-architecture,
+    body.intro-active > #caption{opacity:1!important;visibility:visible!important;pointer-events:auto!important;}
+  }
+
+
+  /* Idle-state architectural drawing: decorative only; existing hover/3D behavior is untouched. */
+  .idle-architecture{
+    position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;
+    opacity:.78;visibility:visible;
+    transition:opacity .48s ease,visibility 0s linear;
+    color:#777;
+  }
+  .idle-architecture svg{display:block;width:100%;height:100%;}
+  .idle-architecture .hairline{fill:none;stroke:currentColor;stroke-width:.8;vector-effect:non-scaling-stroke;}
+  .idle-architecture .fine{fill:none;stroke:currentColor;stroke-width:.55;vector-effect:non-scaling-stroke;}
+  .idle-architecture .dash{stroke-dasharray:5 7;}
+  .idle-architecture .micro{font:10px 'Montserrat',Arial,sans-serif;letter-spacing:2px;fill:currentColor;}
+  body.dark .idle-architecture{opacity:0;visibility:hidden;transition:opacity .22s ease,visibility 0s linear .22s;}
+  @media(max-width:700px){
+    .idle-architecture{opacity:.64;}
+    .idle-architecture .micro{font-size:12px;letter-spacing:1.5px;}
+  }
+  @media(prefers-reduced-motion:reduce){.idle-architecture{transition:none!important;}}
+
+
+  /* HOME IDLE STATE
+     Desktop: the drafting sheet (idle-sheet.webp) is a clean background only. The logo,
+     CONTACT US button and the four labels are LIVE HTML on top of it, so their size, position and
+     brightness are exact and the logo reveal can land precisely on the real logo.
+     Brightness hierarchy (idle):  logo (black)  >  labels (#333)  >  drawing (darkest line about #6b). */
+  @media (min-width: 701px) {
+    .idle-architecture {
+      background-image: url("../assets/images/idle-sheet.webp?v=20261014");
+      background-size: 100% 100%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-color: #f8f7f3;
+      opacity: 1;
+    }
+    .idle-architecture svg { display: none !important; }
+    body:not(.dark) .nav-link { color:#333; opacity:1; }
+    body:not(.dark) .nav-link:focus-visible { outline:1px solid #111; outline-offset:6px; }
+    /* Text-only hover: the quadrant overlays never react to a mouse. */
+    .zone { pointer-events:none; }
+  }
+  /* On narrow screens, retain live HTML navigation rather than shrinking the full drafting sheet. */
+  @media (max-width: 700px) {
+    .idle-architecture { background-image: none !important; opacity: .72; }
+    .idle-architecture svg { display: block !important; }
+    body:not(.dark) .nav-link { color:#333; opacity:1; }
+  }
+  /* Touch devices keep tappable quadrants (first tap reveals, second tap opens). */
+  @media (hover:none),(pointer:coarse){ .zone{ pointer-events:auto; } }
+
+  /* Label hit area = the word itself (plus a hair of padding), never the area around it. */
+  .nav-link{ padding:5px 7px; margin:-5px -7px; }
+  .nav-link.tl{top:0;left:0;} .nav-link.bl{bottom:0;left:0;}
+  .nav-link.tr{top:0;right:0;} .nav-link.br{bottom:0;right:0;}
+
+  /* HOVER PHOTOGRAPH TREATMENT — match the softer, grain-rich monochrome reference.
+     Only the Team/About Us hover photographs are affected; the approved idle blueprint,
+     logo, labels, and existing interaction/animation logic remain unchanged. */
+  .placeholder .photo{
+    filter: grayscale(1) contrast(1.12) brightness(.76) blur(.28px) !important;
+    transform: scale(1.045);
+  }
+  .placeholder.active .photo{
+    filter: grayscale(1) contrast(1.12) brightness(.76) blur(.28px) !important;
+    transform: scale(1);
+  }
+  .placeholder::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    opacity:.12;
+    mix-blend-mode:soft-light;
+    background-image:url("../assets/images/noise.svg");
+    background-size:180px 180px;
+  }
+  .placeholder .photo-vignette{
+    background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.04) 48%,rgba(0,0,0,.25)),
+               radial-gradient(circle at center,transparent 26%,rgba(0,0,0,.30) 100%) !important;
+    opacity:.72 !important;
+  }
+  .placeholder .photo-label{z-index:4;}
+  @media(prefers-reduced-motion:reduce){
+    .placeholder .photo,.placeholder.active .photo{filter:grayscale(1) contrast(1.12) brightness(.76) blur(.28px) !important;}
+  }
